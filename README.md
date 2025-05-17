@@ -46,8 +46,15 @@ Before we move on to exection, following are the assumptions I have made while w
 1. If you are running Windows or MacOS, first we need to open the docker desktop app (not needed for GNU/Linux distros).
 2. Open a terminal and navigate to the working directory.
 3. Run the following command:
+
+For MacOS and GNU/Linux:
 ```
 RAILS_MASTER_KEY=ae15adaff43943328f707f9b33364672 docker compose up --build
+```
+For Windows Power Shell:
+```
+$env:RAILS_MASTER_KEY = "ae15adaff43943328f707f9b33364672"
+docker compose up --build
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &rarr; The api endpoints are now available at localhost:3000 to recieve requests.  
   
@@ -86,10 +93,6 @@ curl -X POST http://localhost:3000/receipts/process   -H "Content-Type: applicat
     "total": "35.35"
   }'; echo
 ```
-For Windows Command Prompt:
-```
-curl -X POST http://localhost:3000/receipts/process -H "Content-Type: application/json" -d "{\"retailer\":\"Target\",\"purchaseDate\":\"2022-01-01\",\"purchaseTime\":\"13:01\",\"items\":[{\"shortDescription\":\"Mountain Dew 12PK\",\"price\":\"6.49\"},{\"shortDescription\":\"Emils Cheese Pizza\",\"price\":\"12.25\"},{\"shortDescription\":\"Knorr Creamy Chicken\",\"price\":\"1.26\"},{\"shortDescription\":\"Doritos Nacho Cheese\",\"price\":\"3.35\"},{\"shortDescription\":\"   Klarbrunn 12-PK 12 FL OZ  \",\"price\":\"12.00\"}],\"total\":\"35.35\"}"
-```
 For Windows Power Shell:
 ```
 Invoke-RestMethod -Uri http://localhost:3000/receipts/process -Method POST -Headers @{
@@ -107,6 +110,10 @@ Invoke-RestMethod -Uri http://localhost:3000/receipts/process -Method POST -Head
   ],
   "total": "35.35"
 }'
+```
+For Windows Command Prompt:
+```
+curl -X POST http://localhost:3000/receipts/process -H "Content-Type: application/json" -d "{\"retailer\":\"Target\",\"purchaseDate\":\"2022-01-01\",\"purchaseTime\":\"13:01\",\"items\":[{\"shortDescription\":\"Mountain Dew 12PK\",\"price\":\"6.49\"},{\"shortDescription\":\"Emils Cheese Pizza\",\"price\":\"12.25\"},{\"shortDescription\":\"Knorr Creamy Chicken\",\"price\":\"1.26\"},{\"shortDescription\":\"Doritos Nacho Cheese\",\"price\":\"3.35\"},{\"shortDescription\":\"   Klarbrunn 12-PK 12 FL OZ  \",\"price\":\"12.00\"}],\"total\":\"35.35\"}"
 ```
 #### You should see something like
 ```
