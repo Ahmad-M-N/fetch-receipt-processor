@@ -10,11 +10,10 @@
 - [Overview](#overview)
 - [Setup](#setup)
   - [Docker](#docker)
-- [Assumptions](#assumptions)
+- [Assumptions & Validations](#assumptions--validations)
 - [Execution](#execution)
 - [Optional: Testing](#optional-testing)
   - [Tests](#tests)
-  - [Execute Tests](#execute-tests)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -33,23 +32,16 @@ This project has been setup to be run with docker. Kindly follow the instuctions
 |GNU/Linux|https://docs.docker.com/engine/install/|
 |MacOS|https://docs.docker.com/desktop/setup/install/mac-install/|
 
-## Assumptions
+## Assumptions & Validations
 Before we move on to exection, following are the assumptions I have made while writing my solution:
-1. The input file is in the same directory as the python file.
-2. User input is not erroneous (e.g. user doesn't put a non-numeric entry for points).
-3. Timestamps will always have double digits in each notation, i.e 3:00 PM will be represented in the timestamp as 03 in hours, 00 in minutes, and 00 in seconds -- 03:00:00; same for date. This is done so I can perfom a simple sort on the timestamp string.
-4. If the points of the payers in the input transaction files are negative, then we have assumed that those points are returned back to the payers at the given timestamp
-    1. The above assumptions means that if there are 3 transactions, 
-    "DANNON",1000,"2020-11-02T14:00:00Z"
-    "UNILEVER",200,"2020-10-31T11:00:00Z"
-    "DANNON",-200,"2020-10-31T15:00:00Z",
-    then the assumptions is that DANNON can contribute only 800 points to the user input and not 1000. 
-
-5. The negative points values have been subtracted from their respective payer groups.
-6. Only valid inputs are assumed for each payer. ie
-   1. No negative points can appear first ( as per timestamp ) as it is not possible to return points to the payer without them contributing first.
-   2. Sum of negative points is assumed to always be greater than the sum of positive points per payer.
-7. **Considering the timeframe, not ALL POSSIBLE unit tests have been written for this function. Ideally the above cases should have a unit test case associated with it.**
+1. Post Request Validation: Only the mentioned fields are permitted in the JSON payload, so if anything other than `retailer`, `purchaseDate`, `purchaseTime`, `items`, or `total`, and within `items`, anything other than `shortDescription` or `price` is sent, it is filtered out.
+2. Additonally, each of these fields is assumed to be present in **every request** even if the **associated value is blank**; for example, even if there are no `items`, there is still an `"items"` key in the JSON, but it is associated with an empty array `[]`.
+3. Get Request Validation: Only `id` is permitted through with the url; anything else is ignored.
+4. The rule **"10 points if the time of purchase is after 2:00pm and before 4:00pm"** is interpreted such that extra points are given when time is strictly greater and strictly less than `2:00 PM` and `4:00 PM` respectively, so if a purchase happens at `2:00 PM` or `4:00 PM`, it is not awarded extra points.
+5. Price amounts cannot be broken down beyond cents; in other words, only up to 2 decimal places per price are expected.
+6. Based on the [given example](#given-example-2) with date `"2022-03-20"`, the date format is assumed to be `YYYY-MM-DD`.
+7. Additionally, it is assumed user input has consistent date and time format with double digits for each entry; for example, `day 3` will always be `03`.
+8. User input is not erroneous (e.g. user doesn't put a non-numeric entry for price).
 
 ## Execution
 1. If you are running Windows or MacOS, first we need to open the docker desktop app (not needed for GNU/Linux distros).
@@ -117,7 +109,7 @@ Invoke-RestMethod -Uri http://localhost:3000/receipts/process -Method POST -Head
   "total": "35.35"
 }'
 ```
-You should see something like
+#### You should see something like
 ```
 {"id":"0af5cbb1-7a94-4860-b968-4ee22af35142"}
 ```
@@ -125,39 +117,87 @@ You should see something like
 ```
 curl http://localhost:3000/receipts/{id}/points
 ```
-In this run, for example, the `id` returned was "0af5cbb1-7a94-4860-b968-4ee22af35142", so we will send the following request:
+In this run, for example, the `id` returned was ```"0af5cbb1-7a94-4860-b968-4ee22af35142"```, so we will send the following request:
 ```
 curl http://localhost:3000/receipts/0af5cbb1-7a94-4860-b968-4ee22af35142/points
 ```
-You should see the points associated with the recipe, something like:
+You should see the points associated with the receipt, something like:
 ```
 {"points":28}
 ```
 ## Optional: Testing
 
-For project completion and polish, I have added tests for the given 
-### Pytest Setup
-If you used the Makefile to run the program, Pytest should already be installed in your device and you can skip to the [tests](#tests). If not, kindly use the guide below to install Pytest on your device:  
-|Installation Guide | https://docs.pytest.org/en/stable/getting-started.html |
-| ----------- | ----------- |  
-
+For project completion and polish, I have added tests for the given cases.
+To execute, kindly follow these instructions:
+1. Open a terminal.
+2. Navigate to the working directory.
+3. Run the following command:
+```
+docker-compose run --rm web bundle exec rails test
+```
 
 ### Tests
-Before we execute the tests, following are the scenarios for which the program has been tested:
-#### 1. Given Example
-This tests the program on the given example. 
-#### 2. File Reading
-This test if the program is successfully able to read the file.
-#### 3. Edge Case 1
-What if ...?
-#### 4. Edge Case 2
-What if ...?
-#### 5. Edge Case 3
-What if ...?
+Following are the scenarios for which the program has been tested:
+#### Given Example 1
+```
+{
+  "retailer": "Target",
+  "purchaseDate": "2022-01-01",
+  "purchaseTime": "13:01",
+  "items": [
+    {
+      "shortDescription": "Mountain Dew 12PK",
+      "price": "6.49"
+    },{
+      "shortDescription": "Emils Cheese Pizza",
+      "price": "12.25"
+    },{
+      "shortDescription": "Knorr Creamy Chicken",
+      "price": "1.26"
+    },{
+      "shortDescription": "Doritos Nacho Cheese",
+      "price": "3.35"
+    },{
+      "shortDescription": "   Klarbrunn 12-PK 12 FL OZ  ",
+      "price": "12.00"
+    }
+  ],
+  "total": "35.35"
+}
+```
+##### Expected Result:  
+```
+{ "points": 28 }
+```
+#### Given Example 2
+```
+{
+  "retailer": "M&M Corner Market",
+  "purchaseDate": "2022-03-20",
+  "purchaseTime": "14:33",
+  "items": [
+    {
+      "shortDescription": "Gatorade",
+      "price": "2.25"
+    },{
+      "shortDescription": "Gatorade",
+      "price": "2.25"
+    },{
+      "shortDescription": "Gatorade",
+      "price": "2.25"
+    },{
+      "shortDescription": "Gatorade",
+      "price": "2.25"
+    }
+  ],
+  "total": "9.00"
+}
+```
+##### Expected Result:  
+```
+{ "points": 109 }
+```
 
-### Execute Tests
-1. Kindly make sure all the files are in the same direcotry.
-2. Just enter `pytest` in your terminal.
 
   
 #### END: Hope this was an easy read. Thank you for your time :-). 
