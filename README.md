@@ -3,6 +3,7 @@
 <ul>
 <li>This repository has been created for <a href="https://github.com/fetch-rewards/receipt-processor-challenge">Fetch's Take Home Assessment</a>. </li>
 <li>The program is built using Ruby on Rails. <b>Ruby 3.4.3 </b> and <b>Rails 8.0.2</b> were used.</li>
+<li>A dockerized implementaion has been included for execution</li>
 <li>I have also included integration tests for the given test cases, written using Minitest.</li>
 </ul> 
 
