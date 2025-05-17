@@ -21,10 +21,10 @@
 First, let's get the repo on local.  
   
 1. Run `git clone https://github.com/Ahmad-M-N/fetch-receipt-processor.git`  
-2. Run `cd fetch-receipt-processor` to move into the repo folder
+2. Run `cd fetch-receipt-processor` to move into the repo folder.
 
 ### Docker
-This project has been setup to be run with docker. Kindly follow the instuctions to below to install docker on your device if you don't have it already:
+This project has been setup to be run with docker. Kindly follow the instuctions below to install docker on your device if you don't have it already:
 |Operating System| Installation Guides |
 | ----------- | ----------- |
 |Windows|https://docs.docker.com/desktop/setup/install/windows-install/|
