@@ -47,6 +47,9 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# For MacOS permissions
+RUN chmod +x bin/*
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
