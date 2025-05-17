@@ -59,8 +59,8 @@ docker compose up --build
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &rarr; The api endpoints are now available at localhost:3000 to recieve requests.  
   
 &nbsp;&nbsp;&nbsp;&nbsp;4. Here is a sample workflow:  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a. Open another terminal.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b. Send a post request:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a. Open another terminal.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b. Send a post request:
    
 For GNU/Linux and MacOS:
 ```
