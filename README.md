@@ -3,8 +3,7 @@
 <ul>
 <li>This repository has been created for <a href="https://github.com/fetch-rewards/receipt-processor-challenge">Fetch's Take Home Assessment</a>. </li>
 <li>The program is built using Ruby on Rails. <b>Ruby 3.4.3 </b> and <b>Rails 8.0.2</b> were used. I have also included integration tests for the given test cases, written using Minitest.</li>
-</ul
-
+</ul> 
 
 ### Table of Contents
 - [Overview](#overview)
@@ -113,11 +112,11 @@ Invoke-RestMethod -Uri http://localhost:3000/receipts/process -Method POST -Head
 ```
 {"id":"0af5cbb1-7a94-4860-b968-4ee22af35142"}
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c. Copy the `id` returned and send a `get request` with the same `id`:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c. Copy the `id` returned and send a `get` request with the same `id`:  
 ```
 curl http://localhost:3000/receipts/{id}/points
 ```
-In this run, for example, the `id` returned was ```"0af5cbb1-7a94-4860-b968-4ee22af35142"```, so we will send the following request:
+In this run, for example, the `id` returned from the `post` request was ```"0af5cbb1-7a94-4860-b968-4ee22af35142"```, so we will send the following request:
 ```
 curl http://localhost:3000/receipts/0af5cbb1-7a94-4860-b968-4ee22af35142/points
 ```
