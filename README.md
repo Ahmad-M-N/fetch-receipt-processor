@@ -118,7 +118,7 @@ For Windows Command Prompt:
 curl -X POST http://localhost:3000/receipts/process -H "Content-Type: application/json" -d "{\"retailer\":\"Target\",\"purchaseDate\":\"2022-01-01\",\"purchaseTime\":\"13:01\",\"items\":[{\"shortDescription\":\"Mountain Dew 12PK\",\"price\":\"6.49\"},{\"shortDescription\":\"Emils Cheese Pizza\",\"price\":\"12.25\"},{\"shortDescription\":\"Knorr Creamy Chicken\",\"price\":\"1.26\"},{\"shortDescription\":\"Doritos Nacho Cheese\",\"price\":\"3.35\"},{\"shortDescription\":\"   Klarbrunn 12-PK 12 FL OZ  \",\"price\":\"12.00\"}],\"total\":\"35.35\"}"
 ```
 #### You should see something like
-```
+```json
 {"id":"0af5cbb1-7a94-4860-b968-4ee22af35142"}
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c. Copy the `id` returned and send a `get` request with the same `id`:  
@@ -130,7 +130,7 @@ In this run, for example, the `id` returned from the `post` request was ```"0af5
 curl http://localhost:3000/receipts/0af5cbb1-7a94-4860-b968-4ee22af35142/points
 ```
 You should see the points associated with the receipt, something like:
-```
+```json
 {"points":28}
 ```
 ## Optional: Testing
@@ -147,7 +147,7 @@ docker-compose run --rm web bundle exec rails test
 ### Tests
 Following are the scenarios for which the program has been tested:
 #### Given Example 1
-```
+```json
 {
   "retailer": "Target",
   "purchaseDate": "2022-01-01",
@@ -174,11 +174,11 @@ Following are the scenarios for which the program has been tested:
 }
 ```
 ##### Expected Result:  
-```
+```json
 { "points": 28 }
 ```
 #### Given Example 2
-```
+```json
 {
   "retailer": "M&M Corner Market",
   "purchaseDate": "2022-03-20",
@@ -202,7 +202,7 @@ Following are the scenarios for which the program has been tested:
 }
 ```
 ##### Expected Result:  
-```
+```json
 { "points": 109 }
 ```
 
